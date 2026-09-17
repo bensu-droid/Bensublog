@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yazılar | Bensu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;1,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="header-utility-bar">
+    <div class="header-utility-inner">
+      <a href="https://instagram.com/Lbensul" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+      </a>
+      <form class="header-search" role="search" action="yazilar.html" method="get">
+        <input type="text" name="q" placeholder="Ara..." aria-label="Sitede ara">
+        <button type="submit" aria-label="Ara">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <header class="header-brand-row">
+    <a href="index.html" class="site-logo">Bensu</a>
+  </header>
+
+  <nav class="site-nav-row" aria-label="Ana menü">
+    <div class="site-nav-row-inner">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="yazilar.html" aria-current="page">Yazılar</a>
+      <a href="hakkimda.html">Hakkımda</a>
+      <a href="iletisim.html">İletişim</a>
+    </div>
+  </nav>
+
+  <main class="narrow">
+
+    <h1 class="section-heading">Tüm Yazılar</h1>
+
+    <div class="filter-row">
+      <button type="button" class="filter-pill active" data-filter="all">Tümü</button>
+      <button type="button" class="filter-pill" data-filter="Psikoloji">Psikoloji</button>
+      <button type="button" class="filter-pill" data-filter="Astroloji">Astroloji</button>
+      <button type="button" class="filter-pill" data-filter="Kişisel Gözlemler">Kişisel Gözlemler</button>
+    </div>
+
+    <!--
+      YENİ YAZI EKLEMEK İÇİN:
+      1) yazilar/ornek-yazi.html dosyasını kopyalayıp yeni bir isimle kaydet (örn: yazilar/ikinci-yazi.html)
+      2) İçindeki başlığı, tarihi ve metni değiştir
+      3) Aşağıya yeni bir <article class="list-card reveal" data-category="Kategori Adı"> bloğu ekle
+         (en üste, en yeni yazı ilk sırada olacak şekilde) — data-category filtrenin çalışması için gerekli!
+    -->
+    <div class="post-list-cards">
+      <article class="list-card reveal" data-category="Psikoloji">
+        <div class="featured-photo reveal" style="background-image: url('images/istedigini-diretmek.jpg'); background-size: cover; background-position: center;"></div>
+        <div>
+          <div class="card-tag-row">
+            <a href="yazilar.html" class="tag-mono">Psikoloji</a>
+          </div>
+          <h2><a href="yazilar/istedigini-diretmek.html">İstediğini Diretmek</a></h2>
+          <p>İstediği olmayınca huzursuzluk çıkaran, sınır konulduğunda agresifleşen insanların ardındaki psikolojiyi; narsizm, Makyavelizm ve pasif-agresif davranış kalıpları üzerinden ele aldığım bir yazı.</p>
+          <span class="card-byline">17 Eylül 2026</span>
+          <div style="margin-top:0.6rem;">
+            <a href="yazilar/istedigini-diretmek.html" class="read-link">Yazıyı oku</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="list-card reveal" data-category="Kişisel Gözlemler">
+        <div class="featured-photo reveal" style="background-image: url('images/heves-kacirmak.jpg'); background-size: cover; background-position: center;"></div>
+        <div>
+          <div class="card-tag-row">
+            <a href="yazilar.html" class="tag-mono">Kişisel Gözlemler</a>
+          </div>
+          <h2><a href="yazilar/heves-kacirmak.html">Heves Kaçırmak</a></h2>
+          <p>Bir işe duyduğumuz hevesin nasıl kolayca söndüğünü, kendimizi ve yakınlarımızı neden sabote ettiğimizi sorguladığım kişisel bir yazı.</p>
+          <span class="card-byline">16 Eylül 2026</span>
+          <div style="margin-top:0.6rem;">
+            <a href="yazilar/heves-kacirmak.html" class="read-link">Yazıyı oku</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="list-card reveal" data-category="Astroloji">
+        <div class="featured-photo reveal" style="background-image: url('images/astroloji-post.jpg'); background-size: cover; background-position: center;"></div>
+        <div>
+          <div class="card-tag-row">
+            <a href="yazilar.html" class="tag-mono">Astroloji</a>
+          </div>
+          <h2><a href="yazilar/insanlar-astrolojiye-neden-onyargilidir.html">İnsanlar Astrolojiye Neden Ön Yargılıdır?</a></h2>
+          <p>Astroloji, numeroloji ve hatta psikolojiye yönelik toplumsal ön yargıyı; belirsizlikle başa çıkma ihtiyacı, cinsiyetlendirilmiş küçümseme ve alanın ticarileştirilmesi üzerinden ele aldığım bir deneme.</p>
+          <span class="card-byline">15 Eylül 2026</span>
+          <div style="margin-top:0.6rem;">
+            <a href="yazilar/insanlar-astrolojiye-neden-onyargilidir.html" class="read-link">Yazıyı oku</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+  </main>
+
+  <footer class="site-footer-minimal">
+    <div class="footer-inner">
+      <p>&copy; 2026 Bensu. Tüm hakları saklıdır.</p>
+      <select class="archive-select" aria-label="Arşivler">
+        <option>Arşivler</option>
+        <option>Eylül 2026</option>
+      </select>
+      <a href="https://instagram.com/Lbensul" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </footer>
+
+  <script src="js/reveal.js" defer></script>
+  <script src="js/filter.js" defer></script>
+  <script src="js/search.js" defer></script>
+</body>
+</html>

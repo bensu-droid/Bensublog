@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yazı Oluşturucu (sadece senin için)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;1,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+  <style>
+    .tool-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+    .tool-note {
+      background-color: var(--bg-alt);
+      border-left: 3px solid var(--accent);
+      padding: 1rem 1.2rem;
+      margin-bottom: 2rem;
+      font-size: 0.92rem;
+      color: var(--text);
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.4rem;
+    }
+    .field label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      padding: 0.7rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background-color: #fff;
+      color: var(--ink);
+    }
+    .field textarea { min-height: 160px; resize: vertical; line-height: 1.5; }
+    .field small { color: var(--muted); font-size: 0.8rem; }
+    .tool-btn {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.8rem 1.8rem;
+      background-color: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .tool-btn:hover { background-color: var(--accent-hover); }
+    .output-block { margin-top: 2.5rem; }
+    .output-block h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      margin: 0 0 0.6rem;
+    }
+    .output-block p.hint { color: var(--muted); font-size: 0.85rem; margin: 0 0 0.7rem; }
+    .output-block textarea {
+      width: 100%;
+      min-height: 220px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background-color: var(--ink);
+      color: #E8E1D6;
+      white-space: pre;
+    }
+    .copy-btn {
+      margin-top: 0.6rem;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.5rem 1.1rem;
+      background-color: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--ink);
+    }
+    .copy-btn:hover { background-color: var(--border); }
+    .copy-btn.copied { background-color: var(--secondary); color: #fff; border-color: var(--secondary); }
+    #result { display: none; }
+
+    .crop-area {
+      max-width: 100%;
+      max-height: 420px;
+      margin-bottom: 1rem;
+      background-color: var(--bg-alt);
+    }
+    .crop-area img { display: block; max-width: 100%; }
+    .crop-actions {
+      display: flex;
+      gap: 0.7rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .crop-preview-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: var(--bg-alt);
+      border-radius: 4px;
+    }
+    .crop-preview-wrap img {
+      width: 140px;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+    }
+    .crop-preview-text { font-size: 0.85rem; color: var(--text); }
+    .aspect-choice {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 0.8rem;
+    }
+    .aspect-choice button {
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background-color: #fff;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .aspect-choice button.active {
+      background-color: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tool-wrap">
+    <h1 class="section-heading">Yazı Oluşturucu</h1>
+
+    <div class="tool-note">
+      Bu sayfa ziyaretçiler için değil — sadece senin yeni yazı hazırlaman için bir araç.
+      Formu doldur, "Kodu Oluştur"a bas, çıkan iki kod bloğunu aşağıdaki talimata göre kullan.
+      Bu sayfa sitene otomatik bir şey eklemez; kodları sen kopyalayıp dosyalara yapıştırman gerekiyor.
+    </div>
+
+    <div class="field">
+      <label for="f-title">Yazı Başlığı</label>
+      <input type="text" id="f-title" placeholder="Örn: Kıskançlık Aslında Neyin Habercisi?">
+    </div>
+
+    <div class="field">
+      <label for="f-category">Kategori</label>
+      <select id="f-category">
+        <option>Psikoloji</option>
+        <option>Astroloji</option>
+        <option>Kişisel Gözlemler</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="f-date">Tarih</label>
+      <input type="date" id="f-date">
+    </div>
+
+    <div class="field">
+      <label for="f-excerpt">Kısa Özet (ana sayfada ve listede görünecek 1-2 cümle)</label>
+      <textarea id="f-excerpt" style="min-height:80px" placeholder="Yazının kısa bir özeti..."></textarea>
+    </div>
+
+    <div class="field">
+      <label for="f-body">Yazının Tam Metni</label>
+      <textarea id="f-body" placeholder="Yazını buraya yapıştır. Paragrafları ayırmak için aralarına boş bir satır bırak."></textarea>
+      <small>Her paragraf arasına bir boş satır bırakırsan, otomatik olarak ayrı paragraflara bölünür.</small>
+    </div>
+
+    <div class="field">
+      <label for="f-slug">Dosya Adı (otomatik önerilir, istersen değiştir)</label>
+      <input type="text" id="f-slug" placeholder="orn-yazi-basligi">
+    </div>
+
+    <div class="field">
+      <label for="f-image">Kapak Görseli (isteğe bağlı ama önerilir)</label>
+      <input type="file" id="f-image" accept="image/*">
+      <small>Bir fotoğraf seç, sonra hangi kısmının görüneceğini kendin seçip kırpabilirsin — otomatik kesme yapılmaz.</small>
+    </div>
+
+    <div id="crop-container" style="display:none;">
+      <div class="aspect-choice">
+        <button type="button" class="active" data-ratio="1.333" onclick="setAspect(1.333, this)">Kart görseli (4:3)</button>
+        <button type="button" data-ratio="1.778" onclick="setAspect(1.778, this)">Yazı üstü büyük görsel (16:9)</button>
+        <button type="button" data-ratio="1" onclick="setAspect(1, this)">Kare (1:1)</button>
+      </div>
+      <div class="crop-area">
+        <img id="crop-image" src="">
+      </div>
+      <div class="crop-actions">
+        <button type="button" class="tool-btn" onclick="cropImage()">Bu Şekilde Kırp</button>
+      </div>
+      <div class="crop-preview-wrap" id="crop-preview-wrap" style="display:none;">
+        <img id="crop-preview-img" src="">
+        <div class="crop-preview-text">
+          Kırpıldı ✓ — aşağıdaki "Kodu Oluştur"a bastığında bu görsel otomatik olarak koda eklenecek.<br>
+          <button type="button" class="copy-btn" onclick="downloadCroppedImage()">Görseli İndir (yedek olarak)</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="tool-btn" onclick="generateCode()">Kodu Oluştur</button>
+
+    <div id="result">
+      <div class="output-block" id="image-save-step" style="display:none;">
+        <h3>1. Kırptığın görseli kaydet</h3>
+        <p class="hint">Az önce "Görseli İndir" butonuna basmadıysan şimdi bas — indirilen dosyayı, blog klasöründeki <code>images</code> klasörünün içine taşı ve adının tam olarak <code id="image-filename-hint"></code> olduğundan emin ol.</p>
+      </div>
+
+      <div class="output-block">
+        <h3><span id="step-post-num">1</span>. Bu kodu yeni bir dosyaya kaydet</h3>
+        <p class="hint">Bu kodun tamamını kopyala. "yazilar" klasörünün içinde, dosya adı kutusunda yazan isimle (örn. <code>kiskanclik.html</code>) yeni bir dosya oluştur ve bu kodu içine yapıştır.</p>
+        <textarea id="out-post" readonly></textarea>
+        <button class="copy-btn" onclick="copyBlock('out-post', this)">Kodu Kopyala</button>
+      </div>
+
+      <div class="output-block">
+        <h3><span id="step-list-num">2</span>. Bu kodu yazilar.html dosyasına ekle</h3>
+        <p class="hint">yazilar.html dosyasını aç, <code>&lt;div class="post-list-cards"&gt;</code> satırının hemen altına bu kodu yapıştır (en yeni yazı en üstte durur).</p>
+        <textarea id="out-list-card" readonly></textarea>
+        <button class="copy-btn" onclick="copyBlock('out-list-card', this)">Kodu Kopyala</button>
+      </div>
+
+      <div class="tool-note">
+        Not: Bu yazıyı Ana Sayfa'daki "Son Yazılar" kartında ve yazı sayfasının altındaki "Diğer Yazılar" bölümünde de göstermek istersen, bana söyle — ilgili dosyaları senin için düzenleyeyim.
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+  <script>
+    var cropper = null;
+    var croppedDataUrl = null;
+    var currentAspect = 1.333;
+
+    document.getElementById('f-image').addEventListener('change', function (e) {
+      var file = e.target.files[0];
+      if (!file) return;
+
+      var reader = new FileReader();
+      reader.onload = function (evt) {
+        var img = document.getElementById('crop-image');
+        img.src = evt.target.result;
+        document.getElementById('crop-container').style.display = 'block';
+        document.getElementById('crop-preview-wrap').style.display = 'none';
+        croppedDataUrl = null;
+
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(img, {
+          aspectRatio: currentAspect,
+          viewMode: 1,
+          autoCropArea: 1,
+          background: false
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function setAspect(ratio, btn) {
+      currentAspect = ratio;
+      document.querySelectorAll('.aspect-choice button').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      if (cropper) cropper.setAspectRatio(ratio);
+    }
+
+    function cropImage() {
+      if (!cropper) return;
+      var targetWidth = currentAspect >= 1.5 ? 1280 : (currentAspect === 1 ? 800 : 1000);
+      var targetHeight = Math.round(targetWidth / currentAspect);
+      var canvas = cropper.getCroppedCanvas({ width: targetWidth, height: targetHeight });
+      croppedDataUrl = canvas.toDataURL('image/jpeg', 0.87);
+
+      document.getElementById('crop-preview-img').src = croppedDataUrl;
+      document.getElementById('crop-preview-wrap').style.display = 'flex';
+    }
+
+    function downloadCroppedImage() {
+      if (!croppedDataUrl) return;
+      var filename = getImageFilename();
+      var a = document.createElement('a');
+      a.href = croppedDataUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function getImageFilename() {
+      var slug = document.getElementById('f-slug').value.trim() || slugify(document.getElementById('f-title').value.trim()) || 'gorsel';
+      return slug + '.jpg';
+    }
+
+    function slugify(str) {
+      var map = {'ç':'c','Ç':'c','ğ':'g','Ğ':'g','ı':'i','İ':'i','ö':'o','Ö':'o','ş':'s','Ş':'s','ü':'u','Ü':'u'};
+      str = str.replace(/[çÇğĞıİöÖşŞüÜ]/g, function (m) { return map[m]; });
+      return str.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+
+    var aylar = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+
+    function turkceTarih(isoDate) {
+      if (!isoDate) return '';
+      var parts = isoDate.split('-');
+      var y = parts[0], m = parseInt(parts[1], 10) - 1, d = parseInt(parts[2], 10);
+      return d + ' ' + aylar[m] + ' ' + y;
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.innerText = str;
+      return div.innerHTML;
+    }
+
+    function paragraphsHtml(text) {
+      return text.split(/\n\s*\n/).map(function (p) {
+        p = p.trim();
+        if (!p) return '';
+        return '        <p>' + escapeHtml(p) + '</p>';
+      }).filter(Boolean).join('\n\n');
+    }
+
+    document.getElementById('f-title').addEventListener('input', function () {
+      var slugField = document.getElementById('f-slug');
+      if (!slugField.dataset.touched) {
+        slugField.value = slugify(this.value);
+      }
+    });
+    document.getElementById('f-slug').addEventListener('input', function () {
+      this.dataset.touched = 'true';
+    });
+
+    function generateCode() {
+      var title = document.getElementById('f-title').value.trim() || 'Başlıksız Yazı';
+      var category = document.getElementById('f-category').value;
+      var dateIso = document.getElementById('f-date').value;
+      var dateTr = turkceTarih(dateIso) || turkceTarih(new Date().toISOString().slice(0,10));
+      var excerpt = document.getElementById('f-excerpt').value.trim() || 'Yazının kısa özeti buraya gelecek.';
+      var body = document.getElementById('f-body').value.trim() || 'Yazının içeriği buraya gelecek.';
+      var slug = document.getElementById('f-slug').value.trim() || slugify(title) || 'yeni-yazi';
+      if (!slug.endsWith('.html')) slug = slug.replace(/\.html$/, '');
+
+      var hasImage = !!croppedDataUrl;
+      var imageFilename = getImageFilename();
+      var postImageBlock = hasImage
+        ? '<div class="post-featured reveal" style="background-image: url(\'../images/' + imageFilename + '\'); background-size: cover; background-position: center;"></div>'
+        : '<div class="post-featured photo-placeholder reveal"></div>';
+      var cardImageBlock = hasImage
+        ? '<div class="featured-photo reveal" style="background-image: url(\'images/' + imageFilename + '\'); background-size: cover; background-position: center;"></div>'
+        : '<div class="featured-photo photo-placeholder reveal"></div>';
+
+      document.getElementById('image-save-step').style.display = hasImage ? 'block' : 'none';
+      document.getElementById('image-filename-hint').textContent = imageFilename;
+      document.getElementById('step-post-num').textContent = hasImage ? '2' : '1';
+      document.getElementById('step-list-num').textContent = hasImage ? '3' : '2';
+      if (hasImage) downloadCroppedImage();
+
+      var postHtml =
+'<!DOCTYPE html>\n' +
+'<html lang="tr">\n' +
+'<head>\n' +
+'  <meta charset="UTF-8">\n' +
+'  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+'  <title>' + escapeHtml(title) + ' | Bensu</title>\n' +
+'  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+'  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+'  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;1,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">\n' +
+'  <link rel="stylesheet" href="../css/style.css">\n' +
+'</head>\n' +
+'<body>\n\n' +
+'  <div class="header-utility-bar">\n' +
+'    <div class="header-utility-inner">\n' +
+'      <a href="https://instagram.com/Lbensul" target="_blank" rel="noopener" aria-label="Instagram">\n' +
+'        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>\n' +
+'      </a>\n' +
+'      <form class="header-search" role="search" action="../yazilar.html" method="get">\n' +
+'        <input type="text" name="q" placeholder="Ara..." aria-label="Sitede ara">\n' +
+'        <button type="submit" aria-label="Ara">\n' +
+'          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>\n' +
+'        </button>\n' +
+'      </form>\n' +
+'    </div>\n' +
+'  </div>\n\n' +
+'  <header class="header-brand-row">\n' +
+'    <a href="../index.html" class="site-logo">Bensu</a>\n' +
+'  </header>\n\n' +
+'  <nav class="site-nav-row" aria-label="Ana menü">\n' +
+'    <div class="site-nav-row-inner">\n' +
+'      <a href="../index.html">Ana Sayfa</a>\n' +
+'      <a href="../yazilar.html" aria-current="page">Yazılar</a>\n' +
+'      <a href="../hakkimda.html">Hakkımda</a>\n' +
+'      <a href="../iletisim.html">İletişim</a>\n' +
+'    </div>\n' +
+'  </nav>\n\n' +
+'  <div class="post-page-wrap">\n\n' +
+'    <article>\n' +
+'      <header class="post-header">\n' +
+'        <div class="card-tag-row">\n' +
+'          <span class="tag-mono">' + escapeHtml(category) + '</span>\n' +
+'        </div>\n' +
+'        <h1>' + escapeHtml(title) + '</h1>\n' +
+'        <span class="card-byline">' + dateTr + '</span>\n' +
+'      </header>\n\n' +
+'      ' + postImageBlock + '\n\n' +
+'      <div class="post-body">\n\n' +
+paragraphsHtml(body) + '\n\n' +
+'      </div>\n\n' +
+'      <footer class="post-footer">\n' +
+'        <a href="../yazilar.html">&larr; Tüm yazılara dön</a>\n' +
+'      </footer>\n' +
+'    </article>\n\n' +
+'    <aside class="author-sidebar">\n' +
+'      <div class="author-card">\n' +
+'        <div class="author-photo" style="background-image: url(\'../images/avatar-bensu.jpg\');"></div>\n' +
+'        <h4>Bensu</h4>\n' +
+'        <a href="https://instagram.com/Lbensul" target="_blank" rel="noopener" class="mini-link">@Lbensul</a>\n' +
+'      </div>\n\n' +
+'      <div class="side-newsletter">\n' +
+'        <span class="side-newsletter-heading">Bültenime Abone Ol</span>\n' +
+'        <form action="https://buttondown.com/api/emails/embed-subscribe/bensu" method="post" class="embeddable-buttondown-form">\n' +
+'          <label for="bd-email" class="sr-only">E-posta adresin</label>\n' +
+'          <input type="email" name="email" id="bd-email" placeholder="E-posta adresin" required>\n' +
+'          <input type="submit" value="Abone Ol">\n' +
+'          <p class="buttondown-credit">\n' +
+'            <a href="https://buttondown.com/refer/bensu" target="_blank" rel="noopener">Powered by Buttondown.</a>\n' +
+'          </p>\n' +
+'        </form>\n' +
+'      </div>\n' +
+'    </aside>\n\n' +
+'  </div>\n\n' +
+'  <footer class="site-footer-minimal">\n' +
+'    <div class="footer-inner">\n' +
+'      <p>&copy; 2026 Bensu. Tüm hakları saklıdır.</p>\n' +
+'      <select class="archive-select" aria-label="Arşivler">\n' +
+'        <option>Arşivler</option>\n' +
+'        <option>Eylül 2026</option>\n' +
+'      </select>\n' +
+'      <a href="https://instagram.com/Lbensul" target="_blank" rel="noopener">Instagram</a>\n' +
+'    </div>\n' +
+'  </footer>\n\n' +
+'  <script src="../js/reveal.js" defer></' + 'script>\n' +
+'</body>\n' +
+'</html>\n';
+
+      var listCardHtml =
+'      <article class="list-card reveal" data-category="' + escapeHtml(category) + '">\n' +
+'        ' + cardImageBlock + '\n' +
+'        <div>\n' +
+'          <div class="card-tag-row">\n' +
+'            <a href="yazilar.html" class="tag-mono">' + escapeHtml(category) + '</a>\n' +
+'          </div>\n' +
+'          <h2><a href="yazilar/' + slug + '.html">' + escapeHtml(title) + '</a></h2>\n' +
+'          <p>' + escapeHtml(excerpt) + '</p>\n' +
+'          <span class="card-byline">' + dateTr + '</span>\n' +
+'          <div style="margin-top:0.6rem;">\n' +
+'            <a href="yazilar/' + slug + '.html" class="read-link">Yazıyı oku</a>\n' +
+'          </div>\n' +
+'        </div>\n' +
+'      </article>';
+
+      document.getElementById('out-post').value = postHtml;
+      document.getElementById('out-list-card').value = listCardHtml;
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyBlock(id, btn) {
+      var el = document.getElementById(id);
+      el.select();
+      el.setSelectionRange(0, 999999);
+      navigator.clipboard.writeText(el.value).then(function () {
+        var original = btn.textContent;
+        btn.textContent = 'Kopyalandı ✓';
+        btn.classList.add('copied');
+        setTimeout(function () {
+          btn.textContent = original;
+          btn.classList.remove('copied');
+        }, 1800);
+      });
+    }
+  </script>
+
+</body>
+</html>

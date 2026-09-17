@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Örnek Yazı Başlığı | Bensu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;1,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <div class="header-utility-bar">
+    <div class="header-utility-inner">
+      <a href="https://instagram.com/Lbensul" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+      </a>
+      <form class="header-search" role="search" action="../yazilar.html" method="get">
+        <input type="text" name="q" placeholder="Ara..." aria-label="Sitede ara">
+        <button type="submit" aria-label="Ara">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <header class="header-brand-row">
+    <a href="../index.html" class="site-logo">Bensu</a>
+  </header>
+
+  <nav class="site-nav-row" aria-label="Ana menü">
+    <div class="site-nav-row-inner">
+      <a href="../index.html">Ana Sayfa</a>
+      <a href="../yazilar.html" aria-current="page">Yazılar</a>
+      <a href="../hakkimda.html">Hakkımda</a>
+      <a href="../iletisim.html">İletişim</a>
+    </div>
+  </nav>
+
+  <div class="post-page-wrap">
+
+    <article>
+      <header class="post-header">
+        <div class="card-tag-row">
+          <span class="tag-mono">Deneme</span>
+        </div>
+        <h1>Örnek Yazı Başlığı</h1>
+        <span class="card-byline">11 Eylül 2026</span>
+      </header>
+
+      <div class="post-featured photo-placeholder reveal"></div>
+
+      <div class="post-body">
+        <p>Bu ilk paragraf, yazının açılışı. Kendi yazını buraya yazdığında burası senin metninle değişecek.</p>
+
+        <p>İkinci paragraf ve devamı normal akışta ilerler. Satır uzunluğu okunabilirlik için bilinçli olarak dar tutuldu, böylece uzun yazılarda bile göz yorulmadan takip edebiliyor.</p>
+
+        <h2>Ara başlık kullanmak istersen</h2>
+        <p>Uzun yazılarda bölümlere ayırmak için ara başlıklar kullanabilirsin — bu şekilde görünürler.</p>
+
+        <blockquote>
+          Alıntı yapmak istediğinde bu şekilde bir blok kullanabilirsin — örneğin okuduğun bir kitaptan ya da başka bir yazıdan bir cümle.
+        </blockquote>
+
+        <p>Yazının kapanış paragrafı.</p>
+      </div>
+
+      <footer class="post-footer">
+        <a href="../yazilar.html">&larr; Tüm yazılara dön</a>
+      </footer>
+    </article>
+
+    <aside class="author-sidebar">
+      <div class="author-card">
+        <div class="author-photo" style="background-image: url('../images/avatar-bensu.jpg');"></div>
+        <h4>Bensu</h4>
+        <a href="https://instagram.com/Lbensul" target="_blank" rel="noopener" class="mini-link">@Lbensul</a>
+      </div>
+
+      <div class="side-newsletter">
+        <span class="side-newsletter-heading">Bültenime Abone Ol</span>
+        <form action="https://buttondown.com/api/emails/embed-subscribe/bensu" method="post" class="embeddable-buttondown-form">
+          <label for="bd-email" class="sr-only">E-posta adresin</label>
+          <input type="email" name="email" id="bd-email" placeholder="E-posta adresin" required>
+          <input type="submit" value="Abone Ol">
+          <p class="buttondown-credit">
+            <a href="https://buttondown.com/refer/bensu" target="_blank" rel="noopener">Powered by Buttondown.</a>
+          </p>
+        </form>
+      </div>
+    </aside>
+
+  </div>
+
+  <!--
+    DİĞER YAZILAR BÖLÜMÜ:
+    Burada başka yazıların kartlarını göstermek istersen, bana söyle,
+    senin için otomatik ekleyeyim — hangi yazıların görüneceğini
+    ben mevcut yazılara göre ayarlarım.
+  -->
+
+  <footer class="site-footer-minimal">
+    <div class="footer-inner">
+      <p>&copy; 2026 Bensu. Tüm hakları saklıdır.</p>
+      <select class="archive-select" aria-label="Arşivler">
+        <option>Arşivler</option>
+        <option>Eylül 2026</option>
+      </select>
+      <a href="https://instagram.com/Lbensul" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </footer>
+
+  <script src="../js/reveal.js" defer></script>
+</body>
+</html>
